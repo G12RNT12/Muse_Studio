@@ -1,0 +1,235 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-denim: var(--denim);
+  --color-frame: var(--frame);
+  --color-ink: var(--foreground);
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 0.25rem;
+  --background: oklch(0.957 0.008 80);
+  --foreground: oklch(0.2 0 0);
+  --card: oklch(0.975 0.006 80);
+  --card-foreground: oklch(0.2 0 0);
+  --popover: oklch(0.975 0.006 80);
+  --popover-foreground: oklch(0.2 0 0);
+  --primary: oklch(0.2 0 0);
+  --primary-foreground: oklch(0.957 0.008 80);
+  --secondary: oklch(0.87 0.008 80);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.87 0.008 80);
+  --muted-foreground: oklch(0.45 0.008 80);
+  --accent: oklch(0.37 0.12 10);
+  --accent-foreground: oklch(0.957 0.008 80);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.2 0 0 / 14%);
+  --input: oklch(0.2 0 0 / 22%);
+  --ring: oklch(0.37 0.12 10);
+  --denim: oklch(0.59 0.05 255);
+  --frame: oklch(0.93 0.006 80);
+  --shadow-lift: 0 18px 40px -12px oklch(0 0 0 / 0.25);
+
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --glide: cubic-bezier(0.16, 1, 0.3, 1);
+  --inout: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); }
+}
+
+@utility font-display-tight {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+/* ============ KINETICS ============ */
+
+/* Squish */
+.k-squish { transition: transform 0.5s var(--spring); }
+.k-squish:active { transform: scale(0.88); transition: transform 0.08s ease-out; }
+
+/* Magnetic */
+.k-magnetic { transition: transform 0.15s ease-out; display: inline-block; }
+
+/* Split reveal */
+.k-split { display: flex; overflow: hidden; flex-wrap: wrap; }
+.k-split > span { display: inline-block; transform: translateY(110%); animation: k-split-in 0.9s var(--spring) forwards; }
+@keyframes k-split-in { to { transform: translateY(0); } }
+
+/* Marquee */
+.k-marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.k-marquee-track { display: flex; width: max-content; animation: k-marquee 28s linear infinite; }
+.k-marquee:hover .k-marquee-track { animation-play-state: paused; }
+@keyframes k-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* Stagger */
+.k-stagger { opacity: 0; transform: translateY(14px); transition: opacity 0.7s var(--glide), transform 0.7s var(--glide); }
+.k-stagger.is-in { opacity: 1; transform: none; }
+
+/* Chips */
+.k-chip { border: 1px solid var(--color-foreground); transition: background-color .25s, color .25s, border-color .25s; }
+.k-chip.on { background: var(--color-accent); color: var(--color-accent-foreground); border-color: var(--color-accent); }
+.k-chip.pop { animation: k-pop 0.45s var(--spring); }
+@keyframes k-pop { 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+/* Tab pill */
+.k-tabs { position: relative; display: inline-flex; border: 1px solid var(--color-border); border-radius: 999px; padding: 3px; }
+.k-tabs-pill { position: absolute; top: 3px; bottom: 3px; border-radius: 999px; background: var(--color-foreground); transition: left .4s var(--inout), width .4s var(--inout); }
+.k-tab { position: relative; z-index: 1; transition: color .4s var(--inout); color: var(--color-foreground); }
+.k-tab.active { color: var(--color-background); }
+
+/* Expanding search */
+.k-search { width: 44px; overflow: hidden; transition: width .4s var(--glide); position: relative; }
+.k-search:focus-within { width: 220px; }
+
+/* Shimmer */
+.k-shimmer {
+  background: linear-gradient(90deg, var(--color-muted) 25%, var(--color-frame) 50%, var(--color-muted) 75%);
+  background-size: 280% 100%;
+  animation: k-shimmer 1.5s linear infinite;
+}
+@keyframes k-shimmer { from { background-position: 140% 0; } to { background-position: -140% 0; } }
+
+/* Toggle pills */
+.k-pill input { position: absolute; opacity: 0; pointer-events: none; }
+.k-pill span { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; height: 2.75rem; border: 1px solid var(--color-foreground); transition: transform .5s var(--spring), background-color .2s, color .2s; }
+.k-pill input:checked + span { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-foreground); transform: scale(1.06); }
+.k-pill input:focus-visible + span { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+
+/* Swatch */
+.k-swatch input { position: absolute; opacity: 0; pointer-events: none; }
+.k-swatch span { position: relative; display: block; width: 2rem; height: 2rem; border-radius: 999px; background: var(--sw); transition: transform .5s var(--spring), box-shadow .3s; }
+.k-swatch span::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--color-background); font-size: .8rem; opacity: 0; transform: scale(.4); transition: opacity .2s, transform .4s var(--spring); }
+.k-swatch input:checked + span { transform: scale(1.2); box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--sw); }
+.k-swatch input:checked + span::after { opacity: 1; transform: scale(1); }
+
+/* Stepper */
+.k-step-btn { transition: transform .4s var(--spring); }
+.k-step-btn:active { transform: scale(.9); transition-duration: .08s; }
+.k-step-val { font-variant-numeric: tabular-nums; display: inline-block; }
+.k-step-val.pop { animation: k-val-pop .45s var(--spring); }
+@keyframes k-val-pop { 40% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+/* Like burst */
+.k-like:not(.absolute) { position: relative; }
+.k-like svg { transition: fill .2s, color .2s; }
+.k-like.pop svg { animation: k-like-pop .5s var(--spring); }
+@keyframes k-like-pop { 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.k-like-p { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border-radius: 999px; background: var(--color-accent); animation: k-like-p .6s var(--glide) forwards; }
+@keyframes k-like-p { from { transform: rotate(var(--a)) translateY(0) scale(1); } to { transform: rotate(var(--a)) translateY(-22px) scale(0); } }
+
+/* Confetti */
+.k-confetti { position: fixed; width: 8px; height: 8px; pointer-events: none; z-index: 100; animation: k-confetti .9s var(--glide) forwards; }
+@keyframes k-confetti { from { transform: translate(0,0) rotate(0); opacity: 1; } to { transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(.3); opacity: 0; } }
+
+/* Accordion */
+.k-acc-body { max-height: 0; overflow: hidden; transition: max-height .5s var(--glide); }
+.k-acc-chev { transition: transform .5s var(--spring); }
+.k-acc.open .k-acc-chev { transform: rotate(180deg); }
+
+/* Badge */
+.k-badge { transition: transform .4s var(--spring); }
+.k-badge.pop { animation: k-badge .32s var(--spring); }
+@keyframes k-badge { 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+
+/* Toast */
+.k-toast { transform: translateY(140%) scale(.9); opacity: 0; transition: transform .55s cubic-bezier(.18,1.25,.4,1), opacity .3s; }
+.k-toast.show { transform: translateY(0) scale(1); opacity: 1; }
+
+/* Hover lift + shine */
+.k-lift { transition: transform .5s var(--spring), box-shadow .5s var(--spring); }
+@media (hover: hover) { .k-lift:hover { transform: translateY(-10px); box-shadow: var(--shadow-lift); } }
+.k-shine { position: relative; overflow: hidden; }
+.k-shine::before { content: ""; position: absolute; top: 0; bottom: 0; left: -120%; width: 60%; z-index: 2; pointer-events: none; transform: skewX(-20deg); background: linear-gradient(90deg, transparent, oklch(1 0 0 / .45), transparent); }
+.group:hover .k-shine::before { left: 120%; transition: left .9s var(--glide); }
+
+/* Drawer */
+.k-drawer { transition: transform .5s var(--glide), opacity .3s; }
+
+/* Snackbar */
+.k-snack { transform: translateY(160%); transition: transform .5s var(--spring); }
+.k-snack.show { transform: translateY(0); }
+.k-snack-bar { transform-origin: left; animation: k-drain 3s linear forwards; }
+@keyframes k-drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+/* Number counter */
+.k-num { display: inline-block; font-variant-numeric: tabular-nums; }
+.k-num.bump { animation: k-num .4s var(--spring); }
+@keyframes k-num { 30% { transform: scale(1.22) translateY(-6px); } 100% { transform: none; } }
+
+/* Underline draw */
+.k-underline { position: relative; }
+.k-underline::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .4s var(--inout); }
+.k-underline:hover::after, .k-underline.active::after { transform: scaleX(1); }
+
+/* Step progress */
+.k-steps-fill { transform-origin: left; transition: transform .5s var(--spring); background: var(--color-accent); }
+.k-step-node { transition: background-color .3s, color .3s, border-color .3s; }
+.k-step-node.on { background: var(--color-accent); color: var(--color-accent-foreground); border-color: var(--color-accent); animation: k-pop .45s var(--spring); }
+
+/* Floating label */
+.k-float { position: relative; }
+.k-float input, .k-float textarea { width: 100%; border: 1px solid var(--color-input); background: transparent; padding: 1.4rem .9rem .5rem; outline: none; transition: border-color .2s; }
+.k-float label { position: absolute; left: .9rem; top: 1rem; pointer-events: none; color: var(--color-muted-foreground); transform-origin: left top; transition: transform .2s, color .2s; }
+.k-float input:focus, .k-float textarea:focus { border-color: var(--color-accent); }
+.k-float input:focus + label, .k-float input:not(:placeholder-shown) + label,
+.k-float textarea:focus + label, .k-float textarea:not(:placeholder-shown) + label { transform: translateY(-.6rem) scale(.75); color: var(--color-accent); }
+.k-float.err input, .k-float.err textarea { border-color: var(--color-destructive); }
+.k-shake { animation: k-shake .45s cubic-bezier(.36,.07,.19,.97); }
+@keyframes k-shake { 10%,90% { transform: translateX(-1px); } 20%,80% { transform: translateX(3px); } 30%,50%,70% { transform: translateX(-6px); } 40%,60% { transform: translateX(6px); } }
+
+/* Submit states */
+.k-submit-state { transition: opacity .25s, transform .25s; }
+.k-dot { width: 6px; height: 6px; border-radius: 999px; background: currentColor; animation: k-dot .6s ease-in-out infinite alternate; }
+@keyframes k-dot { to { transform: translateY(-6px); } }
+.k-check path { stroke-dasharray: 30; stroke-dashoffset: 30; animation: k-draw .5s var(--spring) forwards; }
+@keyframes k-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  .k-marquee-track { animation: none !important; }
+  .k-split > span { transform: none; }
+  .k-stagger { opacity: 1; transform: none; }
+}

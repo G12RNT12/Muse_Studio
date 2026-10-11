@@ -1,0 +1,10 @@
+[build]
+  command = "bun run build"
+  publish = ".output/public"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[dev]
+  command = "bun run dev"
+  port = 8080
